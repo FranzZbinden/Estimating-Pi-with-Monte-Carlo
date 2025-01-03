@@ -18,6 +18,8 @@ This project helped me practice concepts like randomness, loops, conditionals, a
 3. **Circle Check**:
    - If the distance is less than or equal to 1, the point is inside the circle.
 
+https://pyscript.com/@franz2/muddy-grass/  <- link to test run code without IDE (online)
+
 
 The program increases the number of random points iteratively, demonstrating the improved accuracy of the approximation.
 
