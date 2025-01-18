@@ -16,47 +16,167 @@ amounts of random points, iterating from 1 to 100,000 in steps of 100.
 
 """
 
-import random, math
+import tkinter as tk
+import random
+import math
+import time
 
-# Generate random floats betwen -1 and 1
-def calc_random(): 
-    return random.uniform(-1.0,1.0) 
 
-# Calculate distance betwen the center and the given point
-def distance_calc(x,y):
-    return math.sqrt(x**2 + y**2)
+them_mode = "white"   # Variable to store theme state
 
-# Define if an individual point is inside or outside the circle using a radio of 1 
-def inside_oitside(distance):
-    if distance <= 1: 
-        return True
+def toggle_dark_mode():
+    global them_mode
+
+    if them_mode == "white":
+        # Switch to Dark Mode
+        root.config(bg="grey15")
+        main_frame.config(bg="grey15")
+        canvas_frame.config(bg="grey15")
+        canvas.config(bg="grey15")
+        control_frame.config(bg="grey15", bd=0)
+        
+        label_result.config(bg="grey15", fg="white")
+        label_inside.config(bg="grey15", fg="white")
+        label_outside.config(bg="grey15", fg="white")
+        label_timer.config(bg="grey15", fg="white")
+        
+        scale.config(bg="grey15", fg="white", troughcolor="gray20")
+        button.config(bg="grey15", fg="white")
+        dark_button.config(bg="gray30", fg="white", text="Light Mode")
+        
+        them_mode = "dark"  # Toggle mode here
     else:
-        return False
+        # Switch to Light Mode
+        root.config(bg="SystemButtonFace")       # default gray on Windows, etc.
+        main_frame.config(bg="SystemButtonFace")
+        canvas_frame.config(bg="SystemButtonFace")
+        canvas.config(bg="SystemButtonFace")
+        control_frame.config(bg="SystemButtonFace", bd=0)
+        
+        label_result.config(bg="SystemButtonFace", fg="grey30")
+        label_inside.config(bg="SystemButtonFace", fg="grey30")
+        label_outside.config(bg="SystemButtonFace", fg="grey30")
+        label_timer.config(bg="SystemButtonFace", fg="grey30")
+        
+        scale.config(bg="SystemButtonFace", fg="grey30", troughcolor="white")
+        button.config(bg="SystemButtonFace", fg="grey30")
+        dark_button.config(bg="SystemButtonFace", fg="grey30", text="Dark Mode")
+        
+        them_mode = "white"  # Toggle mode here
 
-# Main Function
-def aproximation(points_amount):
+    
 
-    # Counter of points inside/outside of circle
-    outside_circle = 0
-    inside_circle = 0
+def calc_random():
+    return random.uniform(-1.0, 1.0) # Generate a random float between -1 and 1 
 
-    # Loop 
+def run_simulation():
+
+    start_time = time.perf_counter()    # Record the start time of the simulation
+
+    canvas.delete("all")  # Clear the canvas when starting new simulation
+    
+    points_amount = int(scale.get())
+    
+    # Drawing the circle
+    canvas.create_oval(1.5, 1.5, CANVAS_SIZE, CANVAS_SIZE, width=2, outline= "red")
+
+        
+    inside_circle = 0   
+    
     for _ in range(points_amount):
         x = calc_random()
-        y = calc_random()   
-        distance = distance_calc(x,y)
-        where = inside_oitside(distance)
-
-        if where == True:
-            inside_circle = inside_circle + 1
+        y = calc_random()
+        distance = math.sqrt(x**2 + y**2)   # Distance formula optimized 
+        
+        if distance <= 1:   # Determines if the dot is inside the circle
+            inside_circle += 1  #increment the counter if the dot is inside the circle
+            color = "green" # Asign the color green to the points inside the circle radius
         else:
-            outside_circle = outside_circle + 1
+            color = "red" # Asign the color red to the points outsaide the circle radius
+        
+        # Convert [-1,1] to [0, CANVAS_SIZE] for the Canvas ilustration
+        px = (x + 1) * (CANVAS_SIZE / 2)
+        py = (1 - y) * (CANVAS_SIZE / 2)
+        
+        # For drawing a dot
+        radius = 1
+        canvas.create_oval(px - radius, py - radius, px + radius, py + radius, 
+                           fill=color, outline=color)
+        
+        # Timer to calculate the time
+        end_time = time.perf_counter()  # Record the end time of the simulation
+        elapsed = end_time - start_time # Calculate the elapsed time
+        label_timer.config(text=f"Calculation time: {elapsed:.4f} seconds")
+        
+    pi_approx = 4 * (inside_circle / points_amount) # Monte Carlo formula
+
+    # Updates the widgets
+    label_result.config(text=f"Pi approximation: {pi_approx:.6f}")  
+    label_inside.config(text=f"Dots inside the circle: {inside_circle:}")
+    label_outside.config(text=f"Dots outside the circle: {points_amount-inside_circle:}")
+
+# Graphical User Interface
+root = tk.Tk()  # Initializes the main window
+
+root.title("Monte Carlo π Visualization")   
+
+CANVAS_SIZE = 600   # Size of the canvas
+
+# Spacing around the window
+main_frame = tk.Frame(root, padx=10, pady=10)
+main_frame.pack()
+
+# Create a row (frame) for the scale and button side by side
+control_frame = tk.Frame(main_frame)
+control_frame.pack(pady=5)  # spacing around the row
+
+# Scale (slider) to choose the number of points
+scale = tk.Scale(
+    control_frame,
+    from_=50, to=100000,
+    orient=tk.HORIZONTAL,
+    length=200,
+    font=10
+)
+scale.set(50)  # Default initial value
+scale.pack(side=tk.LEFT, padx=5)
+scale.config(highlightthickness=0, troughcolor="gray20")
 
 
-    pi = 4 * (inside_circle / points_amount) 
-    return pi
+# Button to run the simulation
+button = tk.Button(control_frame, text="Run Simulation", font = 15, command=run_simulation,
+width=13, height=1)
 
-# Entry point of program that iterates aproximation with different points amount (1-5000)
-for count in range (1,100000,100):
-    pi = aproximation(count)
-    print("Using", count, " points, the pi aproximation is", pi)
+button.pack(side=tk.LEFT, padx=5)
+
+label_timer = tk.Label(main_frame, text="Calculation time:", font=("TkDefaultFont", 12))
+label_timer.pack(pady=2)
+
+# Frame only for the canvas, with a visible border
+canvas_frame = tk.Frame(main_frame, bd=2, relief="groove", bg="black")
+canvas_frame.pack(pady=5)
+
+# Canvas inside the bordered frame
+canvas = tk.Canvas(canvas_frame, width=CANVAS_SIZE, height=CANVAS_SIZE, highlightthickness=0)
+canvas.pack()
+
+canvas.create_oval(1.5, 1.5, CANVAS_SIZE, CANVAS_SIZE, width=2, outline= "red")
+
+
+# Label to display the Pi approximation
+label_result = tk.Label(main_frame, text="Pi approximation:", font=("TkDefaultFont", 14))
+label_result.pack(pady=4)
+
+# Label to display the dots inside circle
+label_inside = tk.Label(main_frame, text="Dots inside the circle:", font=("TkDefaultFont", 12))
+label_inside.pack(pady=1)
+
+# Label to display the dots outinside circle
+label_outside = tk.Label(main_frame, text="Dots outside the circle:", font=("TkDefaultFont", 12))
+label_outside.pack(pady=2)
+
+# For dark mode
+dark_button = tk.Button(main_frame, text="Dark Mode", command=toggle_dark_mode)
+dark_button.pack(pady=2)
+
+root.mainloop()
