@@ -2,6 +2,11 @@
 
 ## About the Project
 
+
+![Vídeo sin título ‐ Hecho con Clipchamp (3)](https://github.com/user-attachments/assets/957210a2-9f7a-4523-a879-071ad0decfe8)
+
+
+
 This is a Python program I created to estimate the value of π (Pi) using the Monte Carlo method. The program generates random points within a square that surrounds a unit circle and checks how many points fall inside the circle. Based on the ratio of points inside the circle to the total points, it calculates an approximation of π.
 
 This project helped me practice concepts like randomness, loops, conditionals, and mathematical calculations in Python.
