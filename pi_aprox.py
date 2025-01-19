@@ -21,14 +21,13 @@ import random
 import math
 import time
 
-
-them_mode = "white"   # Variable to store theme state
+theme_mode = "white"   # Variable to store theme state
 
 def toggle_dark_mode():
-    global them_mode
+    global theme_mode
 
-    if them_mode == "white":
-        # Switch to Dark Mode
+    if theme_mode == "white":
+        # Switch to dark mode
         root.config(bg="grey15")
         main_frame.config(bg="grey15")
         canvas_frame.config(bg="grey15")
@@ -44,10 +43,10 @@ def toggle_dark_mode():
         button.config(bg="grey15", fg="white")
         dark_button.config(bg="gray30", fg="white", text="Light Mode")
         
-        them_mode = "dark"  # Toggle mode here
+        theme_mode = "dark"  # Switch theme to "dark"
     else:
-        # Switch to Light Mode
-        root.config(bg="SystemButtonFace")       # default gray on Windows, etc.
+        # Switch to dight mode
+        root.config(bg="SystemButtonFace")       # SystemButtonFace = default color of windows
         main_frame.config(bg="SystemButtonFace")
         canvas_frame.config(bg="SystemButtonFace")
         canvas.config(bg="SystemButtonFace")
@@ -62,15 +61,13 @@ def toggle_dark_mode():
         button.config(bg="SystemButtonFace", fg="grey30")
         dark_button.config(bg="SystemButtonFace", fg="grey30", text="Dark Mode")
         
-        them_mode = "white"  # Toggle mode here
+        theme_mode = "white"  # Switch theme to "white"
 
-    
 
 def calc_random():
     return random.uniform(-1.0, 1.0) # Generate a random float between -1 and 1 
 
 def run_simulation():
-
     start_time = time.perf_counter()    # Record the start time of the simulation
 
     canvas.delete("all")  # Clear the canvas when starting new simulation
@@ -133,7 +130,7 @@ control_frame.pack(pady=5)  # spacing around the row
 # Scale (slider) to choose the number of points
 scale = tk.Scale(
     control_frame,
-    from_=50, to=100000,
+    from_=50, to=10000,
     orient=tk.HORIZONTAL,
     length=200,
     font=10
@@ -141,7 +138,6 @@ scale = tk.Scale(
 scale.set(50)  # Default initial value
 scale.pack(side=tk.LEFT, padx=5)
 scale.config(highlightthickness=0, troughcolor="gray20")
-
 
 # Button to run the simulation
 button = tk.Button(control_frame, text="Run Simulation", font = 15, command=run_simulation,
@@ -160,8 +156,8 @@ canvas_frame.pack(pady=5)
 canvas = tk.Canvas(canvas_frame, width=CANVAS_SIZE, height=CANVAS_SIZE, highlightthickness=0)
 canvas.pack()
 
+# Creates the circle on the canvas when starting the app
 canvas.create_oval(1.5, 1.5, CANVAS_SIZE, CANVAS_SIZE, width=2, outline= "red")
-
 
 # Label to display the Pi approximation
 label_result = tk.Label(main_frame, text="Pi approximation:", font=("TkDefaultFont", 14))
@@ -171,11 +167,11 @@ label_result.pack(pady=4)
 label_inside = tk.Label(main_frame, text="Dots inside the circle:", font=("TkDefaultFont", 12))
 label_inside.pack(pady=1)
 
-# Label to display the dots outinside circle
+# Label to display the dots outside circle
 label_outside = tk.Label(main_frame, text="Dots outside the circle:", font=("TkDefaultFont", 12))
 label_outside.pack(pady=2)
 
-# For dark mode
+# Button to switch theme of the program
 dark_button = tk.Button(main_frame, text="Dark Mode", command=toggle_dark_mode)
 dark_button.pack(pady=2)
 
