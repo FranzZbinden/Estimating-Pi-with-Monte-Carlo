@@ -1,6 +1,4 @@
 import random
-import math
-import time
 
 def calc_random():
     return random.uniform(-1.0, 1.0) # Generate a random float between -1 and 1 
