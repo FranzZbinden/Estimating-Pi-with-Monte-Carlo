@@ -5,7 +5,7 @@
 
 This is a Python program I created to estimate the value of π using the Monte Carlo method. The program generates random points within a square that surrounds a unit circle and checks how many points fall inside the circle. Based on the ratio of points inside the circle to the total points, it calculates an approximation of π.
 
-This project helped me practice important programming concepts like randomness, loops, conditionals, and mathematical calculations. I also got to learn how to use the Tkinter library to build a graphical user interface. The program uses a Monte Carlo simulation to approximate the value of π and shows the process visually with points on a canvas. I added features like a slider to adjust the number of points, a dark mode toggle, and a timer to see how long the calculations take. I also implemented a section to display how many dots fall inside and outside the circle during the simulation. Working on this helped me understand how to combine math, programming, and GUI design in Python.
+This project helped me learn how to use the Tkinter library to build a graphical user interface. The program uses a Monte Carlo simulation to approximate the value of π and shows the process visually with points on a canvas. I added features like a slider to adjust the number of points, a dark mode toggle, and a timer to see how long the calculations take. I also implemented a section to display how many dots fall inside and outside the circle during the simulation. Working on this helped me understand how to combine math, programming, and GUI design in Python.
 
 ![Vídeo sin título ‐ Hecho con Clipchamp (3)](https://github.com/user-attachments/assets/957210a2-9f7a-4523-a879-071ad0decfe8)
 
